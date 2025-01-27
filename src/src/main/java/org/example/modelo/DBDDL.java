@@ -1,6 +1,7 @@
 package org.example.modelo;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -30,5 +31,22 @@ public class DBDDL {
             System.out.println("Error general al intentar crear la tabla: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+        public static void guardarDatos(String titulo, String descripcion){
+            String sql = """
+                INSERT INTO "Tarea" (titulo, descripcion)
+                VALUES (?, ?);
+            """;
+
+            try (PreparedStatement ps = ConexionSingleton.getConnection().prepareStatement(sql)) {
+                ps.setString(1, titulo);
+                ps.setString(2, descripcion);
+
+                ps.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+        }
+
     }
 }
