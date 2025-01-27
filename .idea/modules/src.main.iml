@@ -7,7 +7,7 @@
       <sourceFolder url="file://$MODULE_DIR$/../../src/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../src/src/main/resources" type="java-resource" />
     </content>
-    <orderEntry type="jdk" jdkName="23" jdkType="JavaSDK" />
+    <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Gradle: org.postgresql:postgresql:42.7.5" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: org.checkerframework:checker-qual:3.48.3" level="project" />
