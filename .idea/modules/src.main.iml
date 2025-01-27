@@ -9,5 +9,7 @@
     </content>
     <orderEntry type="jdk" jdkName="23" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Gradle: org.postgresql:postgresql:42.7.5" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.checkerframework:checker-qual:3.48.3" level="project" />
   </component>
 </module>
