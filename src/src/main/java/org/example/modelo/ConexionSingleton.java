@@ -1,64 +1,72 @@
 package org.example.modelo;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+
+import java.io.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 public class ConexionSingleton {
 
     private static Connection conexion;
 
-    public static Connection getConexion() {
-        if(conexion==null){
-            try{
-                conexion = conectar();
-                System.out.println("Conexión establecida");
-            }catch (IOException e){
-                System.out.println("No se pudo conectar");
+    private static Map<String,String> leerArchivo(String archivo){
+        Map<String,String> resultado = new HashMap<String,String>();
+        //Lectura del archivo
+
+        try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                // Ignorar líneas vacías
+                if (line.trim().isEmpty()) {
+                    continue;
+                }
+
+                // Dividir línea en clave y valor
+                String[] parts = line.split("=", 2); // Dividir por el primer '='
+                if (parts.length == 2) {
+                    String key = parts[0].trim();
+                    String value = parts[1].trim();
+                    resultado.put(key, value);
+                }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return conexion;
+
+
+        return resultado;
     }
 
-    private static Connection conectar() throws IOException {
-        Properties properties = new Properties();
-        String IP, PORT, BBDD, USER, PWD;
+    public static Connection getConnection() {
+        // Leer las configuraciones del archivo .env
+        Map<String, String> config = leerArchivo(".env");
+
+        // Obtener los valores necesarios
+        String dbUrl = config.get("DB_URL");
+        String dbName = config.get("DB");
+        String dbUser = config.get("DB_USER");
+        String dbPassword = config.get("DB_PASSWORD");
+
+        // Verificar que todos los valores requeridos estén presentes
+        if (dbUrl == null || dbName == null || dbUser == null || dbPassword == null) {
+            throw new IllegalArgumentException("Faltan configuraciones en el archivo .env");
+        }
+
+        Connection connection = null;
+
         try {
-            InputStream input_ip = new FileInputStream("ip.properties");
-            properties.load(input_ip);
-            IP = (String) properties.get("IP");
-        } catch (FileNotFoundException e) {
-            System.out.println("No se pudo encontrar el archivo de propiedades para IP, se establece localhost por defecto");
-            IP = "localhost";
+            // Crear la conexión a la base de datos
+            String fullUrl = dbUrl + dbName; // Combinar URL y nombre de la base de datos
+            connection = DriverManager.getConnection(fullUrl, dbUser, dbPassword);
+            System.out.println("Conexión exitosa a la base de datos.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error al conectar con la base de datos.");
         }
 
-        InputStream input = ConexionSingleton.class.getClassLoader().getResourceAsStream("bbdd.properties");
-        if (input == null) {
-            System.out.println("No se pudo encontrar el archivo de propiedades");
-            return null;
-        } else {
-            properties.load(input);
-            PORT = (String) properties.get("PORT");
-            BBDD = (String) properties.get("BBDD");
-            USER = (String) properties.get("USER");
-            PWD = (String) properties.get("PWD");
-
-            Connection conn;
-            try {
-                String cadconex = "jdbc:postgresql://" + IP + ":" + PORT + "/" + BBDD + " USER:" + USER + "PWD:" + PWD;
-                System.out.println(cadconex);
-                conn = DriverManager.getConnection("jdbc:postgresql://" + IP + ":" + PORT + "/" + BBDD, USER, PWD);
-                return conn;
-            } catch (SQLException e) {
-                System.out.println("Error SQL: " + e.getMessage());
-
-                return null;
-            }
-        }
+        return connection;
     }
-
 }
