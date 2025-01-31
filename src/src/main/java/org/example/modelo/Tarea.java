@@ -7,11 +7,18 @@ public class Tarea {
     private String descripcion;
     private boolean hecho;
 
-    public Tarea(String titulo, String descripcion) {
-        this.id = ++contadorId; // AUTOINCREMENT
+    public Tarea(String titulo, String descripcion, boolean hecho) {
+        this.id = contadorId++;
         this.titulo = titulo;
         this.descripcion = descripcion;
-        this.hecho = false;
+        this.hecho = hecho;
+    }
+
+    public Tarea(int id, String titulo, String descripcion, boolean hecho) {
+        this.id = id;
+        this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.hecho = hecho;
     }
 
     public boolean estaHecho() {
@@ -42,13 +49,19 @@ public class Tarea {
         return this.id;
     }
 
+
     @Override
     public String toString() {
-        return "Tarea{" +
-                "id=" + id +
-                ", titulo='" + titulo + '\'' +
-                ", descripcion='" + descripcion + '\'' +
-                ", hecho=" + hecho +
-                '}';
+        StringBuilder sb = new StringBuilder();
+        sb.append("+-----------------------------+\n");
+        sb.append("| Tarea                       \n");
+        sb.append("+-----------------------------+\n");
+        sb.append("| ID: " + id + "\n");
+        sb.append("| Título: " + titulo + "\n");
+        sb.append("| Descripción: " + descripcion + "\n");
+        sb.append("| Hecho: " + hecho + "\n");
+        sb.append("+-----------------------------+\n");
+        return sb.toString();
     }
+
 }
