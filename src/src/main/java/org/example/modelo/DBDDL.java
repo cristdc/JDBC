@@ -35,19 +35,27 @@ public class DBDDL {
         }
     }
 
-    public static void guardarDatos(String titulo, String descripcion, boolean hecho) {
+    public static int guardarDatos(String titulo, String descripcion, boolean hecho) {
+        int idGenerado = -1;
         String sql = """
-                    INSERT INTO "Tarea" (titulo, descripcion, hecho)
-                    VALUES (?, ?, ?);
-                """;
-        try (PreparedStatement ps = ConexionSingleton.getConnection().prepareStatement(sql)) {
-            ps.setString(1, titulo);
-            ps.setString(2, descripcion);
-            ps.setBoolean(3, hecho);
-            ps.executeUpdate();
+        INSERT INTO "Tarea" (titulo, descripcion, hecho) VALUES (?, ?, ?) RETURNING id
+        """;
+
+        try (Connection conn = ConexionSingleton.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, titulo);
+            pstmt.setString(2, descripcion);
+            pstmt.setBoolean(3, hecho);
+
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                idGenerado = rs.getInt("id");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return idGenerado;
     }
 
     public static void editarDatos(int id, String titulo, String descripcion, boolean hecho, int opcion) {

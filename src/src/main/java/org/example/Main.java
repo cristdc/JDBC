@@ -39,25 +39,23 @@ public class Main {
                     DBDDL.mostrarTareas(tareas);
                 }
                 case 2 -> {
-                    int autoincrementar = 0;
-                    for (int i = 0; i < tareas.size(); i++) {
-                        if (tareas.size() == 0) {
+                    System.out.println("Introduce el título de la tarea:");
+                    String titulo = new Scanner(System.in).nextLine().trim();
 
-                        } else {
-                            if (tareas.get(i).getId() > autoincrementar) {
-                                autoincrementar = tareas.get(i).getId();
-                            }
-                        }
+                    System.out.println("Introduce la descripción de la tarea:");
+                    String descripcion = new Scanner(System.in).nextLine().trim();
+
+                    if (titulo.isEmpty() || descripcion.isEmpty()) {
+                        System.out.println("El título y la descripción no pueden estar vacíos.");
+                        break;
                     }
 
-                    System.out.println("Introduce el título de la tarea");
-                    String titulo = new Scanner(System.in).nextLine();
-                    System.out.println("Introduce las descripción de la tarea");
-                    String descripcion = new Scanner(System.in).nextLine();
-
-                    Tarea tarea = new Tarea(autoincrementar + 1, titulo, descripcion, false);
-                    DBDDL.guardarDatos(tarea.getTitulo(), tarea.getDescripcion(), false);
-                    tareas.add(tarea);
+                    int nuevoId = DBDDL.guardarDatos(titulo, descripcion, false);
+                    if (nuevoId != -1) {
+                        tareas.add(new Tarea(nuevoId, titulo, descripcion, false));
+                    } else {
+                        System.out.println("Error al insertar la tarea en la base de datos.");
+                    }
                 }
                 case 3 -> {
 
@@ -145,4 +143,3 @@ public class Main {
         }
     }
 }
-
