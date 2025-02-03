@@ -55,10 +55,10 @@ public class DBDDL {
         switch (opcion) {
             case 1 -> {
                 sql = """
-                            UPDATE "Tarea"
-                            SET titulo = ?, descripcion = ?
-                            WHERE id = ?;
-                        """;
+                    UPDATE "Tarea"
+                    SET titulo = ?, descripcion = ?
+                    WHERE id = ?;
+                  """;
                 try (PreparedStatement ps = ConexionSingleton.getConnection().prepareStatement(sql)) {
                     ps.setString(1, titulo);
                     ps.setString(2, descripcion);
@@ -71,14 +71,13 @@ public class DBDDL {
             }
             case 2 -> {
                 sql = """
-                            UPDATE "Tarea"
-                            SET hecho = ?
-                            WHERE id = ?;
-                        """;
+                    UPDATE "Tarea"
+                    SET hecho = ?
+                    WHERE id = ?;
+                  """;
                 try (PreparedStatement ps = ConexionSingleton.getConnection().prepareStatement(sql)) {
                     ps.setBoolean(1, hecho);
-                    ps.setInt(2, opcion);
-
+                    ps.setInt(2, id);  // Aquí está la corrección, usar "id" en lugar de "opcion"
 
                     ps.executeUpdate();
                 } catch (SQLException e) {
@@ -87,6 +86,7 @@ public class DBDDL {
             }
         }
     }
+
 
 
     public static List<Tarea> consultarDatos() {
@@ -129,7 +129,16 @@ public class DBDDL {
         }
     }
 
-    public static void eliminarTarea(int id){
-
+    public static void eliminarTarea(int id) {
+        String query = """
+                            DELETE FROM "Tarea"
+                            WHERE id = ?;
+                        """;
+        try (PreparedStatement ps = ConexionSingleton.getConnection().prepareStatement(query)) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

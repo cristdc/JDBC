@@ -71,17 +71,23 @@ public class Main {
                         case 2 -> {
                             System.out.println("Introduce 'true' o 'false' si está hecha o no");
                             boolean hecha = new Scanner(System.in).nextBoolean();
+                            tareas.get().estaHecho(hecha);
                             DBDDL.editarDatos(id, "", "", hecha, opcionEditar);
                         }
                     }
                 }
                 case 4 -> {
-                    System.out.println();
+                    System.out.println("Introduce el ID de la tarea que desea eliminar");
+                    int idIntroducida = new Scanner(System.in).nextInt();
+                    DBDDL.eliminarTarea(idIntroducida);
+                    tareas.remove(idIntroducida-1);
                 }
 
             }
 
         }
+
+
         System.out.println("Introduce el título de la tarea: ");
         String titulo = new Scanner(System.in).nextLine();
         System.out.println("Introduce la descripcion de la tarea");
@@ -90,3 +96,4 @@ public class Main {
 
     }
 }
+

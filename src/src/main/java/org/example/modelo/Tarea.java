@@ -21,8 +21,9 @@ public class Tarea {
         this.hecho = hecho;
     }
 
-    public boolean estaHecho() {
-        return this.hecho;
+
+    public void estaHecho(boolean realizar){
+        this.hecho = realizar;
     }
 
     public void completarTarea() {
