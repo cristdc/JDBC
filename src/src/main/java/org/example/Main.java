@@ -41,8 +41,12 @@ public class Main {
                 case 2 -> {
                     int autoincrementar = 0;
                     for (int i = 0; i < tareas.size(); i++) {
-                        if (tareas.get(i).getId() > autoincrementar) {
-                            autoincrementar = tareas.get(i).getId();
+                        if (tareas.size() == 0) {
+
+                        } else {
+                            if (tareas.get(i).getId() > autoincrementar) {
+                                autoincrementar = tareas.get(i).getId();
+                            }
                         }
                     }
 
