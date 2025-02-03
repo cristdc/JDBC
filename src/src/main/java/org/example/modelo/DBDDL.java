@@ -2,6 +2,8 @@ package org.example.modelo;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class DBDDL {
@@ -38,32 +40,29 @@ public class DBDDL {
                     INSERT INTO "Tarea" (titulo, descripcion, hecho)
                     VALUES (?, ?, ?);
                 """;
-
         try (PreparedStatement ps = ConexionSingleton.getConnection().prepareStatement(sql)) {
             ps.setString(1, titulo);
             ps.setString(2, descripcion);
-            ps.setBoolean(3,hecho);
-
+            ps.setBoolean(3, hecho);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public static void editarDatos(int id, String titulo, String descripcion, boolean hecho, int opcion){
-
+    public static void editarDatos(int id, String titulo, String descripcion, boolean hecho, int opcion) {
         String sql;
-        switch (opcion){
+        switch (opcion) {
             case 1 -> {
                 sql = """
-                    UPDATE "Tarea"
-                    SET titulo = ?, descripcion = ?
-                    WHERE id = ?;
-                """;
+                            UPDATE "Tarea"
+                            SET titulo = ?, descripcion = ?
+                            WHERE id = ?;
+                        """;
                 try (PreparedStatement ps = ConexionSingleton.getConnection().prepareStatement(sql)) {
                     ps.setString(1, titulo);
                     ps.setString(2, descripcion);
-                    ps.setInt(3,id);
+                    ps.setInt(3, id);
 
                     ps.executeUpdate();
                 } catch (SQLException e) {
@@ -72,10 +71,10 @@ public class DBDDL {
             }
             case 2 -> {
                 sql = """
-                    UPDATE "Tarea"
-                    SET hecho = ?
-                    WHERE id = ?;
-                """;
+                            UPDATE "Tarea"
+                            SET hecho = ?
+                            WHERE id = ?;
+                        """;
                 try (PreparedStatement ps = ConexionSingleton.getConnection().prepareStatement(sql)) {
                     ps.setBoolean(1, hecho);
                     ps.setInt(2, opcion);
@@ -106,7 +105,12 @@ public class DBDDL {
                     );
                     tarea.add(tarea1);
 
-                    System.out.println(tarea1.toString());
+                    //System.out.println(tarea1.toString());
+                }
+                Collections.sort(tarea, Comparator.comparingInt(Tarea::getId));
+
+                for (Tarea t : tarea) {
+                    System.out.println(t.toString());
                 }
             }
 
@@ -114,6 +118,18 @@ public class DBDDL {
             e.printStackTrace();
         }
         return tarea;
+
+    }
+
+    public static void mostrarTareas(List<Tarea> tareas) {
+        Collections.sort(tareas, Comparator.comparingInt(Tarea::getId));
+
+        for (Tarea tarea : tareas) {
+            System.out.println(tarea.toString());
+        }
+    }
+
+    public static void eliminarTarea(int id){
 
     }
 }
