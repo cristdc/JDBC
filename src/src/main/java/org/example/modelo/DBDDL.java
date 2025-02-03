@@ -77,7 +77,7 @@ public class DBDDL {
                   """;
                 try (PreparedStatement ps = ConexionSingleton.getConnection().prepareStatement(sql)) {
                     ps.setBoolean(1, hecho);
-                    ps.setInt(2, id);  // Aquí está la corrección, usar "id" en lugar de "opcion"
+                    ps.setInt(2, id);
 
                     ps.executeUpdate();
                 } catch (SQLException e) {

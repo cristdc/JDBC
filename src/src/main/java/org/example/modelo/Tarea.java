@@ -22,7 +22,7 @@ public class Tarea {
     }
 
 
-    public void estaHecho(boolean realizar){
+    public void setHecho(boolean realizar){
         this.hecho = realizar;
     }
 

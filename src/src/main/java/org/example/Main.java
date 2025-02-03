@@ -39,16 +39,24 @@ public class Main {
                     DBDDL.mostrarTareas(tareas);
                 }
                 case 2 -> {
+                    int autoincrementar = 0;
+                    for (int i = 0; i < tareas.size(); i++) {
+                        if (tareas.get(i).getId() > autoincrementar) {
+                            autoincrementar = tareas.get(i).getId();
+                        }
+                    }
+
                     System.out.println("Introduce el título de la tarea");
                     String titulo = new Scanner(System.in).nextLine();
                     System.out.println("Introduce las descripción de la tarea");
                     String descripcion = new Scanner(System.in).nextLine();
 
-                    Tarea tarea = new Tarea(tareas.size()+1,titulo, descripcion, false);
+                    Tarea tarea = new Tarea(autoincrementar + 1, titulo, descripcion, false);
                     DBDDL.guardarDatos(tarea.getTitulo(), tarea.getDescripcion(), false);
                     tareas.add(tarea);
                 }
                 case 3 -> {
+
                     System.out.println("¿Cuál es el ID de la tarea que quieres editar?");
                     int id = new Scanner(System.in).nextInt();
                     System.out.println("""
@@ -57,6 +65,7 @@ public class Main {
                             2 -> Realizada.
                             """);
                     int opcionEditar = new Scanner(System.in).nextInt();
+
                     switch (opcionEditar) {
                         case 1 -> {
                             System.out.println("Introduce el nuevo título");
@@ -64,14 +73,44 @@ public class Main {
                             System.out.println("Introduce la nueva descripción");
                             String descripcionNueva = new Scanner(System.in).nextLine();
 
-                            tareas.get(id-1).setTitulo(tituloNuevo);
-                            tareas.get(id-1).setDescripcion(descripcionNueva);
-                            DBDDL.editarDatos(id, tituloNuevo, descripcionNueva, false, opcionEditar);
+                            Tarea tareaAEditar = null;
+                            for (Tarea tarea : tareas) {
+                                if (tarea.getId() == id) {
+                                    tareaAEditar = tarea;
+                                    break;
+                                }
+                            }
+
+                            if (tareaAEditar != null) {
+                                tareaAEditar.setTitulo(tituloNuevo);
+                                tareaAEditar.setDescripcion(descripcionNueva);
+                                DBDDL.editarDatos(id, tituloNuevo, descripcionNueva, false, opcionEditar);
+                            } else {
+                                System.out.println("No existe una tarea con ese ID.");
+                            }
                         }
                         case 2 -> {
                             System.out.println("Introduce 'true' o 'false' si está hecha o no");
-                            boolean hecha = new Scanner(System.in).nextBoolean();
-                            tareas.get().estaHecho(hecha);
+                            Scanner scanner = new Scanner(System.in);
+                            String input = scanner.nextLine().trim();
+
+                            boolean hecha;
+                            if (input.equalsIgnoreCase("true")) {
+                                hecha = true;
+                            } else if (input.equalsIgnoreCase("false")) {
+                                hecha = false;
+                            } else {
+                                System.out.println("Entrada no válida. Debes escribir 'true' o 'false'.");
+                                break;
+                            }
+                            int posicionTarea = 0;
+                            for (int i = 0; i < tareas.size(); i++) {
+                                if (tareas.get(i).getId() == id) {
+                                    posicionTarea = i;
+                                }
+                            }
+
+                            tareas.get(posicionTarea).setHecho(hecha);
                             DBDDL.editarDatos(id, "", "", hecha, opcionEditar);
                         }
                     }
@@ -79,21 +118,27 @@ public class Main {
                 case 4 -> {
                     System.out.println("Introduce el ID de la tarea que desea eliminar");
                     int idIntroducida = new Scanner(System.in).nextInt();
-                    DBDDL.eliminarTarea(idIntroducida);
-                    tareas.remove(idIntroducida-1);
+
+                    Tarea tareaAEliminar = null;
+                    for (Tarea tarea : tareas) {
+                        if (tarea.getId() == idIntroducida) {
+                            tareaAEliminar = tarea;
+                            break;
+                        }
+                    }
+
+                    if (tareaAEliminar != null) {
+                        tareas.remove(tareaAEliminar);
+                        DBDDL.eliminarTarea(idIntroducida);
+                    } else {
+                        System.out.println("No existe una tarea con ese ID.");
+                    }
                 }
 
+                case 5 -> repetir = false;
+
             }
-
         }
-
-
-        System.out.println("Introduce el título de la tarea: ");
-        String titulo = new Scanner(System.in).nextLine();
-        System.out.println("Introduce la descripcion de la tarea");
-        String descripcion = new Scanner(System.in).nextLine();
-        DBDDL.guardarDatos(titulo, descripcion, false);
-
     }
 }
 
