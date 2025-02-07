@@ -64,7 +64,7 @@ public class ConexionSingleton {
                 connection = DriverManager.getConnection(fullUrl, dbUser, dbPassword);
                 System.out.println("Conexión exitosa a la base de datos.");
             }else{
-                connection = DriverManager.getConnection(supabase, config.get("DB_USER"),config.get("DB_PASSWORD"));
+                connection = DriverManager.getConnection(supabase,dbUser,dbPassword);
                 System.out.println("Conexión exitosa a la base de datos.");
             }
 
