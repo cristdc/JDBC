@@ -49,7 +49,7 @@ public class ConexionSingleton {
         String dbName = config.get("DB");
         String dbUser = config.get("DB_USER");
         String dbPassword = config.get("DB_PASSWORD");
-
+        String supabase = config.get("SUPABASE");
         // Verificar que todos los valores requeridos estén presentes
         if (dbUrl == null || dbName == null || dbUser == null || dbPassword == null) {
             throw new IllegalArgumentException("Faltan configuraciones en el archivo .env");
@@ -59,9 +59,15 @@ public class ConexionSingleton {
 
         try {
             // Crear la conexión a la base de datos
-            String fullUrl = dbUrl + dbName; // Combinar URL y nombre de la base de datos
-            connection = DriverManager.getConnection(fullUrl, dbUser, dbPassword);
-            System.out.println("Conexión exitosa a la base de datos.");
+            if (supabase == null){
+                String fullUrl = dbUrl + dbName; // Combinar URL y nombre de la base de datos
+                connection = DriverManager.getConnection(fullUrl, dbUser, dbPassword);
+                System.out.println("Conexión exitosa a la base de datos.");
+            }else{
+                connection = DriverManager.getConnection(supabase, config.get("DB_USER"),config.get("DB_PASSWORD"));
+                System.out.println("Conexión exitosa a la base de datos.");
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Error al conectar con la base de datos.");
