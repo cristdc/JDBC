@@ -6,13 +6,12 @@ import org.example.modelo.Tarea;
 
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
-import java.sql.SQLOutput;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws UnsupportedEncodingException {
+        //el maestro es mi tentación
         System.setOut(new PrintStream(System.out, true, "UTF-8"));
 
         List<Tarea> tareas;
@@ -24,12 +23,12 @@ public class Main {
         boolean repetir = true;
         while (repetir) {
             System.out.println("""
-                    Elija una de las siguientes opciones:
-                    1 -> Mostrar tareas.
-                    2 -> Añadir tarea.
-                    3 -> Editar tarea.
-                    4 -> Eliminar tarea.
-                    5 -> Salir.
+                    🕺🪩 Elija una de las siguientes opciones:
+                    1 -> Mostrar tareas.👀
+                    2 -> Añadir tarea. 📖
+                    3 -> Editar tarea. ✏️
+                    4 -> Eliminar tarea. 🗑️
+                    5 -> Salir.🙊🚪
                     """);
             String eleccion = new Scanner(System.in).nextLine();
             int num = Integer.parseInt(eleccion);
@@ -54,7 +53,7 @@ public class Main {
                     if (nuevoId != -1) {
                         tareas.add(new Tarea(nuevoId, titulo, descripcion, false));
                     } else {
-                        System.out.println("Error al insertar la tarea en la base de datos.");
+                        System.out.println("🙊Error al insertar la tarea en la base de datos.");
                     }
                 }
                 case 3 -> {

@@ -126,7 +126,6 @@ public class DBDDL {
             e.printStackTrace();
         }
         return tarea;
-
     }
 
     public static void mostrarTareas(List<Tarea> tareas) {

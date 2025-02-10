@@ -10,7 +10,6 @@ import java.util.Properties;
 
 public class ConexionSingleton {
 
-    private static Connection conexion;
 
     private static Map<String,String> leerArchivo(String archivo){
         Map<String,String> resultado = new HashMap<String,String>();
