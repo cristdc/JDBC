@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws UnsupportedEncodingException {
-        //el maestro es mi tentación
+
         System.setOut(new PrintStream(System.out, true, "UTF-8"));
 
         List<Tarea> tareas;
